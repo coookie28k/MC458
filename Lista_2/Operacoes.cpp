@@ -23,10 +23,10 @@ No* insert(No* raiz, int n) {
 }
 
 
-N* inserir(N* raiz, int chave) {
-    N* novo;
+No* inserir(No* raiz, int chave) {
+    No* novo;
     if (raiz == NULL) {
-    novo = malloc(sizeof(struct no));
+    novo = malloc(sizeof(struct No));
     novo->esq = novo->dir = NULL;
     novo->chave = chave;
     return novo;
