@@ -59,11 +59,16 @@ int main() {
 
         sort(times.begin(), times.end(), melhor);
 
-        cout << "Instancia " <<  count << endl;
-        for (auto& t : times) cout << t.id << " ";
-        cout << endl; 
+        cout << "Instancia " << count << "\n";
+        for (int i = 0; i < n; i++) {
+            cout << times[i].id;
+            if (i < n - 1) cout << " ";
+        }
+        cout << "\n";
+
         count++;
         cin >> n;
+        if (n != 0) cout << "\n";
     }
     return 0;
 }
