@@ -62,64 +62,62 @@ No* R(No* raiz, int x) {
 }
 
 //esq raiz dir
-void INFIXA(No* raiz, bool& primeiro) {
+void INFIXA(No* raiz, bool& um) {
     if (!raiz) return;
-    INFIXA(raiz->esq, primeiro);
-    if (!primeiro) cout << " ";
+    INFIXA(raiz->esq, um);
+    if (!um) cout << " ";
     cout << raiz->chave;
-    primeiro = false;
-    INFIXA(raiz->dir, primeiro);
+    um = false;
+    INFIXA(raiz->dir, um);
 }
 
 //raiz esq dir
-void PREFIXA(No* raiz, bool& primeiro) {
+void PREFIXA(No* raiz, bool& um) {
     if (!raiz) return;
-    if (!primeiro) cout << " ";
+    if (!um) cout << " ";
     cout << raiz->chave;
-    primeiro = false;
-    PREFIXA(raiz->esq, primeiro);
-    PREFIXA(raiz->dir, primeiro);
+    um = false;
+    PREFIXA(raiz->esq, um);
+    PREFIXA(raiz->dir, um);
 }
 
 //esq dir raz
-void POSFIXA(No* raiz, bool& primeiro) {
+void POSFIXA(No* raiz, bool& um) {
     if (!raiz) return;
-    POSFIXA(raiz->esq, primeiro);
-    POSFIXA(raiz->dir, primeiro);
-    if (!primeiro) cout << " ";
+    POSFIXA(raiz->esq, um);
+    POSFIXA(raiz->dir, um);
+    if (!um) cout << " ";
     cout << raiz->chave;
-    primeiro = false;
+    um = false;
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-
     No* raiz = nullptr;
-    string comando;
+    string oper;
     int n;
-
-    while (cin >> comando) {
-        if (comando == "I") {
+    while (cin >> oper) {
+        if (oper == "I") {
             cin >> n;
             raiz = I(raiz, n);
-        } else if (comando == "R") {
+        } else if (oper == "R") {
             cin >> n;
             raiz = R(raiz, n);
-        } else if (comando == "P") {
+        } else if (oper == "P") {
             cin >> n;
             cout << n << (P(raiz, n) ? " existe" : " nao existe") << "\n";
-        } else if (comando == "INFIXA") {
-            bool primeiro = true;
-            INFIXA(raiz, primeiro);
+        } else if (oper == "INFIXA") {
+            bool um = true;
+            INFIXA(raiz, um);
             cout << "\n";
-        } else if (comando == "PREFIXA") {
-            bool primeiro = true;
-            PREFIXA(raiz, primeiro);
+        } else if (oper == "PREFIXA") {
+            bool um = true;
+            PREFIXA(raiz, um);
             cout << "\n";
-        } else if (comando == "POSFIXA") {
-            bool primeiro = true;
-            POSFIXA(raiz, primeiro);
+        } else if (oper == "POSFIXA") {
+            bool um = true;
+            POSFIXA(raiz, um);
             cout << "\n";
         }
     }
