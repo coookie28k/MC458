@@ -97,6 +97,7 @@ int main() {
     No* raiz = nullptr;
     string oper;
     int n;
+    bool um = true;
     while (cin >> oper) {
         if (oper == "I") {
             cin >> n;
@@ -108,15 +109,15 @@ int main() {
             cin >> n;
             cout << n << (P(raiz, n) ? " existe" : " nao existe") << "\n";
         } else if (oper == "INFIXA") {
-            bool um = true;
+            um = true;
             INFIXA(raiz, um);
             cout << "\n";
         } else if (oper == "PREFIXA") {
-            bool um = true;
+            um = true;
             PREFIXA(raiz, um);
             cout << "\n";
         } else if (oper == "POSFIXA") {
-            bool um = true;
+            um = true;
             POSFIXA(raiz, um);
             cout << "\n";
         }
