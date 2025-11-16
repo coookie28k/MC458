@@ -11,16 +11,16 @@ struct No {
     No* dir = nullptr;
 };
 
-No* I(No* raiz, int n) {
-    if (!raiz) {
-        No* novo = new No;
-        novo->chave = n;
-        return novo;   
+    No* I(No* raiz, int n) {
+        if (!raiz) {
+            No* novo = new No;
+            novo->chave = n;
+            return novo;   
+        }
+        if (n < raiz->chave) raiz->esq = I(raiz->esq, n);
+        else if (n > raiz->chave) raiz->dir = I(raiz->dir, n);
+        return raiz;
     }
-    if (n < raiz->chave) raiz->esq = I(raiz->esq, n);
-    else if (n > raiz->chave) raiz->dir = I(raiz->dir, n);
-    return raiz;
-}
 
 bool P(No* raiz, int n) {
     if (raiz == NULL) return false;
@@ -52,7 +52,7 @@ No* R(No* raiz, int x) {
             delete raiz;
             return aux;
         } else {
-            //menor valor da subar esq ocupa o espaco
+            //maior valor da subar esq ocupa o espaco
             No* ant = maiorVSub(raiz->esq);
             raiz->chave = ant->chave;
             raiz->esq = R(raiz->esq, ant->chave);
