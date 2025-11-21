@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <atomic>
 #include <new>
-#pragma once
 
 using namespace std;
 
@@ -30,7 +29,6 @@ void* operator new(std::size_t sz) {
     return ptr;
 }
 
-// 2. new array (ex: new int[100]) - ESSENCIAL para Matriz Densa
 void* operator new[](std::size_t sz) {
     if (track_alloc) allocated_bytes += sz;
     void* ptr = std::malloc(sz);
@@ -50,7 +48,7 @@ struct Cronometro {
         inicio = chrono::high_resolution_clock::now();
     }
 
-    long long fim_ns() {
+    long long finalizar() {
         auto fim = chrono::high_resolution_clock::now();
         return chrono::duration_cast<chrono::nanoseconds>(fim - inicio).count();
     }

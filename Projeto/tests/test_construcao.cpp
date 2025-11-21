@@ -41,7 +41,7 @@ void teste_construcao(int dimensao, double esparsidade) {
             for (auto &p : base)
                 A.set(p.second.i, p.second.j, p.second.valor);
             
-            t_densa = cron.fim_ns();
+            t_densa = cron.finalizar();
         }
         stop_tracking();
         m_densa = get_tracked_bytes();
@@ -60,7 +60,7 @@ void teste_construcao(int dimensao, double esparsidade) {
             for (auto &p : base)
                 B.set(p.second.i, p.second.j, p.second.valor);
             
-            t_e1 = cron.fim_ns();
+            t_e1 = cron.finalizar();
         } // B é destruída aqui, mas o tracking parou antes se colocarmos stop dentro?
           // MELHOR: Medir tempo até o fim da inserção, parar tracking, pegar memória.
         
@@ -79,7 +79,7 @@ void teste_construcao(int dimensao, double esparsidade) {
             for (auto &p : base)
                 C.set(p.second.i, p.second.j, p.second.valor);
             
-            t_e2 = cron.fim_ns();
+            t_e2 = cron.finalizar();
         }
         stop_tracking();
         m_e2 = get_tracked_bytes();

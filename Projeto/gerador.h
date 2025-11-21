@@ -14,6 +14,10 @@ struct Entry {
     int i, j, valor;
 };
 
+// Gera um hashmap em que a chave eh a linearizacao da posicao do elemento na matriz
+// O valor eh a propria posicao (i, j) + valor
+// Essa estrutura priorizou legibilidade em detrimento de performance,
+// porque o espaco e o tempo de construcao dessa estrutura eh desconsiderada nos testes
 unordered_map<long long, Entry>
 gerar_matriz_esparsa(long long dimensao, double esparsidade)
 {
