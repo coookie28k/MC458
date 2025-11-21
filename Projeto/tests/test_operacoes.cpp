@@ -211,7 +211,7 @@ void teste_escalar(int dim, double esp) {
             
             start_tracking(); 
             cron.comecar();
-            MatrizDensa R = A.multiplicarEscalar(escalar);
+            A.multiplicarEscalarInPlace(escalar);
             t_densa = cron.fim_ns();
             m_densa = get_tracked_bytes();
         }
@@ -224,7 +224,7 @@ void teste_escalar(int dim, double esp) {
 
         start_tracking();
         cron.comecar();
-        MatrizEsparsaHashDup R = A.multiplicarEscalar(escalar); 
+        A.multiplicarEscalar(escalar); 
         t_e1 = cron.fim_ns();
         m_e1 = get_tracked_bytes();
         stop_tracking();
@@ -236,7 +236,7 @@ void teste_escalar(int dim, double esp) {
 
         start_tracking();
         cron.comecar();
-        MatrizEsparsaTreeDup R = A.multiplicarEscalar(escalar);
+        A.multiplicarEscalar(escalar);
         t_e2 = cron.fim_ns();
         m_e2 = get_tracked_bytes();
         stop_tracking();
