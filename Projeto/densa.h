@@ -71,6 +71,7 @@ public:
     }
 
     //MULTIPLICACAO POR ESCALAR
+    /*
     MatrizDensa multiplicarEscalar(double escalar) const {
         MatrizDensa resultado(linhas_, colunas_);
         
@@ -81,7 +82,15 @@ public:
             }
         }
         return resultado;
+    } */
+   void multiplicarEscalarInPlace(double escalar) {
+        for (int i = 0; i < linhas_; ++i) {
+            for (int j = 0; j < colunas_; ++j) {
+                elementos_[i][j] *= escalar;
+            }
+        }
     }
+
 
     //MULTIPLICACAO DE MATRIZES
     MatrizDensa multiplicar(const MatrizDensa& outra) const {

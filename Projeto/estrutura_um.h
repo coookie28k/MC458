@@ -264,6 +264,7 @@ public:
     }
 
     //MULTIPLICACAO POR ESCALAR
+    /*
     MatrizEsparsaHashDup multiplicarEscalar(double escalar) const {
         MatrizEsparsaHashDup R(linhas_, colunas_);
 
@@ -277,7 +278,21 @@ public:
             }
         }
         return R;
+    } */
+   void multiplicarEscalar(double escalar) {
+        vector<Node1*> const &headsA = *(this->headsRowAtiva);
+        bool viewIsIJ_A = (this->tabelaAtiva == &this->tabelaIJ);
+
+        for (int idx = 0; idx < (int)headsA.size(); ++idx) {
+            for (Node1* n = headsA[idx];
+                n != nullptr;
+                n = (viewIsIJ_A ? n->nextRowIJ : n->nextRowJI))
+            {
+                n->valor *= escalar;
+            }
+        }
     }
+
 
     //MULTIPLICACAO DE MATRIZES
     MatrizEsparsaHashDup multiplicar(const MatrizEsparsaHashDup& B) const {
