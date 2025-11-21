@@ -158,6 +158,7 @@ public:
     }
 
     //MULTIPLICACAO POR ESCALAR
+    /*
     MatrizEsparsaTreeDup multiplicarEscalar(double escalar) const {
         MatrizEsparsaTreeDup R(*this);
 
@@ -168,6 +169,13 @@ public:
         }
 
         return R;
+    }*/
+    void multiplicarEscalar(double escalar) {
+        for (auto& [i, inner] : mapPorLinha) {
+            for (auto& [j, node] : inner) {
+                node->valor *= escalar;
+            }
+        }
     }
 
     // MULTIPLICACAO DE MATRIZES
