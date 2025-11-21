@@ -6,14 +6,18 @@
 
 using namespace std;
 
-long long chave(long long linha, long long coluna, long long n) {
+long long gerarChave(long long linha, long long coluna, long long n) {
     return linha * n + coluna; // linearizacao da chave (i, j)
 }
 
-unordered_map<long long, int>
+struct Entry {
+    int i, j, valor;
+};
+
+unordered_map<long long, Entry>
 gerar_matriz_esparsa(long long dimensao, double esparsidade)
 {
-    unordered_map<long long, int> matriz;
+    unordered_map<long long, Entry> matriz;
 
     long long total = dimensao * dimensao;
     long long num_elementos = llround(total * esparsidade);
@@ -27,13 +31,18 @@ gerar_matriz_esparsa(long long dimensao, double esparsidade)
             long long linha  = rand() % dimensao;
             long long coluna = rand() % dimensao;
 
-            long long chave = chave(linha, coluna, dimensao);
+            long long chave = gerarChave(linha, coluna, dimensao);
 
             // Verifica se a chave ja foi usada, ou seja, se a posicao ja foi preenchida
             if (matriz.find(chave) == matriz.end()) {
                 posicao_valida = true;
                 int valor = (rand() % 100) + 1;
-                matriz[chave] = valor;
+
+                Entry e;
+                e.i = linha;
+                e.j = coluna;
+                e.valor = valor;
+                matriz[chave] = e;
             }
         }
     }
@@ -44,7 +53,7 @@ gerar_matriz_esparsa(long long dimensao, double esparsidade)
 void gerarTodasMatrizesEsparsas() {
     srand(time(NULL));
 
-    for (int i = 2; i <= 6; i++) {
+    for (int i = 1; i <= 3; i++) {
         double esparsidades[4];
 
         long long dimensao = pow(10, i);
