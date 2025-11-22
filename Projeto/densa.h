@@ -34,6 +34,7 @@ public:
         if (i >= 0 && i < linhas_ && j >=0 && j < colunas_){
             return elementos_[i][j];
         }
+        return 0;
     }
 
     int getLinhas() const {
