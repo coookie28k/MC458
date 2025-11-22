@@ -126,7 +126,7 @@ void teste_insercao_consulta(int dim, double esp) {
     imprimir_csv("SET", "Est1(Hash)", dim, esp, t_set_e1, m_set_e1);
     imprimir_csv("SET", "Est2(Tree)", dim, esp, t_set_e2, m_set_e2);
 
-    imprimir_csv("GET", "Densa", dim, esp, t_get_densa, 0); // Memoria leitura irrelevante
+    imprimir_csv("GET", "Densa", dim, esp, t_get_densa, 0);
     imprimir_csv("GET", "Est1(Hash)", dim, esp, t_get_e1, 0);
     imprimir_csv("GET", "Est2(Tree)", dim, esp, t_get_e2, 0);
 }
@@ -146,9 +146,6 @@ void teste_transposta(int dim, double esp) {
             MatrizDensa A(dim, dim);
             for(auto &p : base) A.set(p.second.i, p.second.j, p.second.valor);
             
-            // Reseta tracking para medir APENAS a operação transposta (delta de memória)
-            // Se quiser memória total, não resete. Mas geralmente queremos o custo da operação.
-            // Vou medir memória total de A^T
             start_tracking(); 
             cron.comecar();
             MatrizDensa T = A.transposta();
@@ -253,8 +250,6 @@ void teste_soma(int dim, double esp) {
 // TESTE DE MULTIPLICACAO
 // ==========================================
 void teste_multiplicacao(int dim, double esp) {
-    // Multiplicação Densa é O(N^3), então o limite precisa ser MUITO menor
-    // Se N=1000, 10^9 operações (segundos). Se N=10000, 10^12 (horas).
     int limit_mult_densa = 1000; 
 
     auto baseA = gerar_matriz_esparsa(dim, esp);
@@ -330,7 +325,7 @@ void teste_escalar(int dim, double esp) {
             cron.comecar();
             A.multiplicarEscalarInPlace(escalar);
             t_densa = cron.finalizar();
-            m_densa = get_tracked_bytes(); // Delta é 0 pois é in-place, mas ok registrar
+            m_densa = get_tracked_bytes();
         }
         stop_tracking();
     }
@@ -369,12 +364,11 @@ void teste_escalar(int dim, double esp) {
 void teste_todas_operacoes() {
     srand(time(NULL));
 
-    // Loop principal
     for (int i = 2; i <= 8; i++) { // 10^2 = 100 ... 10^8
         double esparsidades[4];
         long long dimensao = pow(10, i);
         
-        // Ajuste de esparsidade conforme tamanho para não explodir memória
+        // Ajuste de esparsidade conforme especificacao do projeto
         if (i < 4) {
             esparsidades[0] = 0.01; esparsidades[1] = 0.05; esparsidades[2] = 0.10; esparsidades[3] = 0.20;
         } else {
@@ -400,7 +394,6 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    // Cabeçalho CSV
     cout << "Operacao,Estrutura,N,Esparsidade,Tempo_ns,Memoria_Bytes" << endl;
 
     teste_todas_operacoes();

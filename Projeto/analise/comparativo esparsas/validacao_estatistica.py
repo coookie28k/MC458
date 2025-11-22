@@ -4,13 +4,10 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# ==========================================
-# CONFIGURAÇÃO
-# ==========================================
+
 INPUT_FILE = "resultados_funcao_k.csv"
 SNS_STYLE = "whitegrid"
 
-# Cores consistentes para cada estrutura
 COLORS = {
     'Hash': '#1f77b4', # Azul
     'Tree': '#ff7f0e'  # Laranja
@@ -52,7 +49,7 @@ def plot_combinado_ms():
 
     df = pd.read_csv(INPUT_FILE)
     
-    # Limpeza
+    # Dados de teste com valor -1 são invalidos e linhas corrompidas
     df = df[df['Tempo_ns'] > 0]
     df['k'] = pd.to_numeric(df['k'], errors='coerce')
     df['Tempo_ns'] = pd.to_numeric(df['Tempo_ns'], errors='coerce')
@@ -61,18 +58,15 @@ def plot_combinado_ms():
     # --- CONVERSÃO PARA MILISSEGUNDOS (ms) ---
     df['Tempo_ms'] = df['Tempo_ns'] / 1e6 
 
-    # Padronizar nomes
+    # Padronizar nomes para diferentes arquivos de teste
     df['Estrutura'] = df['Estrutura'].replace({'Est1(Hash)': 'Hash', 'Est2(Tree)': 'Tree'})
-
-    # Lista de operações
     operacoes = df['Operacao'].unique()
 
     for op in operacoes:
-        # Ignora operações irrelevantes
         if op not in ['SOMA', 'MULT', 'TRANS', 'ESCALAR', 'SET', 'GET']: continue
 
         # Cria a figura
-        fig, ax = plt.subplots(figsize=(10, 6))
+        _, ax = plt.subplots(figsize=(10, 6))
         
         # Loop pelas estruturas para plotar no MESMO gráfico
         for est in ['Hash', 'Tree']:

@@ -10,7 +10,6 @@
 
 using namespace std;
 
-// Função auxiliar para saída CSV
 void imprimir_csv(string estrutura, int n, double esp, long long tempo, long long mem) {
     cout << "CONSTRUCAO," 
          << estrutura << "," 
@@ -22,7 +21,7 @@ void imprimir_csv(string estrutura, int n, double esp, long long tempo, long lon
 
 void teste_construcao(int dimensao, double esparsidade) {
     // Gera a base de dados (mapa) para popular as matrizes
-    // Nota: O tempo de geração dessa base NÃO entra na conta, apenas a construção da matriz alvo
+    // O tempo de geração dessa base NÃO entra na conta, apenas a construção da matriz alvo
     unordered_map<long long, Entry> base = gerar_matriz_esparsa(dimensao, esparsidade);
 
     Cronometro cron;
@@ -32,7 +31,7 @@ void teste_construcao(int dimensao, double esparsidade) {
     // ======================
     // Teste Matriz Densa
     // ======================
-    // Limitamos Densa a 10.000 pois 100.000^2 doubles = ~80 GB de RAM
+    // Limitamos Densa a 10.000 x 10.000
     if (dimensao <= 10000) { 
         start_tracking();
         cron.comecar();
@@ -54,15 +53,13 @@ void teste_construcao(int dimensao, double esparsidade) {
         start_tracking();
         cron.comecar();
         
-        // Escopo interno para garantir medição precisa da construção
         {
             MatrizEsparsaHashDup B(dimensao, dimensao);
             for (auto &p : base)
                 B.set(p.second.i, p.second.j, p.second.valor);
             
             t_e1 = cron.finalizar();
-        } // B é destruída aqui, mas o tracking parou antes se colocarmos stop dentro?
-          // MELHOR: Medir tempo até o fim da inserção, parar tracking, pegar memória.
+        }
         
         stop_tracking();
         m_e1 = get_tracked_bytes();
@@ -112,7 +109,7 @@ void teste_todas_construcoes() {
         }
 
         for (double e : esparsidades) {
-            if (e <= 0.0) continue; // Evita divisão por zero ou erros
+            if (e <= 0.0) continue;
             teste_construcao(dimensao, e);
         }
     }
@@ -122,7 +119,6 @@ int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    // Cabeçalho do CSV
     cout << "Operacao,Estrutura,N,Esparsidade,Tempo_ns,Memoria_Bytes" << endl;
 
     teste_todas_construcoes();
