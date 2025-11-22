@@ -3,13 +3,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# ==========================================
-# CONFIGURAÇÃO
-# ==========================================
 INPUT_FILE = "resultados_operacoes.csv"
 SNS_STYLE = "whitegrid"
 
-# Cores para manter consistência visual (Densa sempre vermelha para destaque)
 PALETTE = {
     'Densa': '#d62728',      # Vermelho
     'Est1(Hash)': '#1f77b4', # Azul
@@ -18,7 +14,6 @@ PALETTE = {
     'Tree': '#2ca02c'
 }
 
-# Marcadores para diferenciar visualmente os pontos
 MARKERS = {
     'Densa': 'X', 
     'Est1(Hash)': 'o', 
@@ -35,10 +30,10 @@ def plot_comparativo_separado():
     # 1. Carregar Dados
     df = pd.read_csv(INPUT_FILE)
     
-    # 2. Limpeza e Conversão
+    # 2. Dados de teste com valor -1 são invalidos
     df = df[df['Tempo_ns'] > 0]
     
-    # Converter para unidades legíveis
+    # Converter para milisegundos e MB
     df['Tempo_ms'] = df['Tempo_ns'] / 1e6
     df['Memoria_MB'] = df['Memoria_Bytes'] / 1e6
     
@@ -70,7 +65,6 @@ def plot_comparativo_separado():
         plt.xlabel('Dimensão da Matriz (N)', fontsize=12)
         plt.ylabel('Tempo (ms)', fontsize=12)
         
-        # Configurações Logarítmicas
         plt.xscale('log')
         plt.yscale('log')
         plt.grid(True, which="minor", ls=":", alpha=0.4)
@@ -105,7 +99,6 @@ def plot_comparativo_separado():
         plt.xlabel('Dimensão da Matriz (N)', fontsize=12)
         plt.ylabel('Memória (MB)', fontsize=12)
         
-        # Configurações Logarítmicas
         plt.xscale('log')
         plt.yscale('log')
         plt.grid(True, which="minor", ls=":", alpha=0.4)

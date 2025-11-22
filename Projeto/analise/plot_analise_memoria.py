@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
-# ==========================================
-# CONFIGURAÇÃO
-# ==========================================
+
 INPUT_FILE = "resultados_operacoes.csv"
 SNS_STYLE = "whitegrid"
 
@@ -25,17 +23,16 @@ def plot_memoria_unificado():
     # 1. Carregar Dados
     df = pd.read_csv(INPUT_FILE)
     
-    # 2. Preparação
+    # Converter para milisegundos e MB
     df['Memoria_MB'] = df['Memoria_Bytes'] / 1e6
     df['k_calculado'] = (df['N']**2 * df['Esparsidade']).astype(int)
     
-    # Filtra memória válida
+    # 3. Dados de teste com valor -1 são invalidos
     df = df[df['Memoria_Bytes'] > 0]
 
     # ===========================================================
     # GRÁFICO 1: Memória x N (AGREGADO)
     # ===========================================================
-    # AQUI ESTÁ A MÁGICA: Agrupamos por Estrutura e N e tiramos a média
     df_agregado_n = df.groupby(['Estrutura', 'N'], as_index=False)['Memoria_MB'].mean()
 
     plt.figure(figsize=(8, 6))
@@ -45,11 +42,11 @@ def plot_memoria_unificado():
         x='N', 
         y='Memoria_MB', 
         hue='Estrutura', 
-        style='Estrutura', # Usa formas diferentes (bolinha, quadrado)
+        style='Estrutura',
         palette=PALETTE,
-        s=100,        # Pontos maiores
+        s=100,
         alpha=0.9,    
-        edgecolor="k" # Borda preta para destacar bem o ponto único
+        edgecolor="k"
     )
     
     plt.title('Escalabilidade de Memória por Dimensão (N) - Médias', fontsize=14, fontweight='bold')
@@ -70,7 +67,6 @@ def plot_memoria_unificado():
     # ===========================================================
     # GRÁFICO 2: Memória x K (AGREGADO - Apenas Esparsas)
     # ===========================================================
-    # Filtra Densa fora
     df_esparsas = df[
         (df['Estrutura'].str.contains('Hash|Tree|Est')) & 
         (~df['Estrutura'].str.contains('Densa'))

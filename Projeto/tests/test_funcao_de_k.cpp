@@ -18,7 +18,6 @@ using namespace std;
 const int N = 20000;   // dimensão fixa
 const int TRIALS = 3;   // repetir para mediana
 
-// Função auxiliar de impressão
 void imprimir_csv(
     const string &op,          
     const string &estrutura,   
@@ -26,7 +25,6 @@ void imprimir_csv(
     long long tempo,           
     long long mem              
 ) {
-    // Cast explícito para double para garantir divisão de ponto flutuante
     double total_elementos = (double)N * (double)N;
     double esparsidade = (double)k / total_elementos;
 
@@ -39,11 +37,10 @@ void imprimir_csv(
 }
 
 // -----------------------------
-// Amostragens: Algoritmo de Floyd (Adaptado para long long)
+// Amostragens: Algoritmo de Floyd
 // -----------------------------
 static vector<long long> sample_k_unique_indices(long long total, long long k, std::mt19937_64 &rng) {
     unordered_set<long long> S;
-    // Reserva memória para evitar rehashing frequente
     S.reserve((size_t)(k * 1.3 + 10)); 
 
     for (long long i = total - k; i < total; ++i) {
@@ -63,7 +60,7 @@ static vector<long long> sample_k_unique_indices(long long total, long long k, s
     return out;
 }
 
-// Lista de K para teste (Foco em densidade crescente)
+// Lista de K para teste
 vector<long long> gerar_lista_k_super_denso() {
     vector<long long> ks;
     ks.reserve(5000);
@@ -71,16 +68,16 @@ vector<long long> gerar_lista_k_super_denso() {
     // 1) Ultra denso (k=1 a 200, passo 1)
     for (long long x = 1; x <= 200; x++) ks.push_back(x);
     
-    // 2) Super denso (k=200 a 2000, passo 5)
+    // 2) Super denso (k=200 a 2000, passo 10)
     for (long long x = 201; x <= 1000; x += 10) ks.push_back(x);
     
-    // 3) Moderado (k=2000 a 10000, passo 25)
+    // 3) Moderado (k=2000 a 10000, passo 100)
     for (long long x = 2010; x <= 10000; x += 100) ks.push_back(x);
     
-    // 4) Médio (k=10000 a 40000, passo 125)
+    // 4) Médio (k=10000 a 40000, passo 1000)
     for (long long x = 10100; x <= 40000; x += 1000) ks.push_back(x);
 
-    // 5) Grande (k=10000 a 200000, passo 125)
+    // 5) Grande (k=10000 a 200000, passo 10000)
     for (long long x = 41000; x <= 200000; x += 10000) ks.push_back(x);
 
     return ks;
@@ -98,13 +95,11 @@ static vector<EntryLocal> generate_exact_k_entries(int Nlocal, long long k, std:
 
     if (k == 0) return entries;
 
-    // Gera índices únicos linearizados (0 a N*N - 1)
     auto idxs = sample_k_unique_indices(total, k, rng);
     
     for (long long idx : idxs) {
         int ii = (int)(idx / Nlocal);
         int jj = (int)(idx % Nlocal);
-        // Valor aleatório entre 1 e 100
         entries.push_back(EntryLocal{ii, jj, (int)(rng() % 100 + 1)});
     }
     return entries;
@@ -378,22 +373,19 @@ void teste_insercao_consulta_k(long long k, std::mt19937_64 &rng) {
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    // Cast para unsigned int padrão do C++ para srand
     srand((unsigned int)time(nullptr));
 
-    std::random_device rd; 
-    std::mt19937_64 rng(rd());
+    random_device rd; 
+    mt19937_64 rng(rd());
 
     cout << "Operacao,Estrutura,k,Esparsidade,Tempo_ns,Memoria_Bytes" << '\n';
 
     auto ks = gerar_lista_k_super_denso();
 
     for (auto k : ks) {
-        // Cálculo seguro com long long
         long long total = (long long)N * (long long)N;
         if (k > total) break;
 
-        // Log de progresso na stderr para não sujar o CSV
         cerr << "Running k=" << k << "\n"; cerr.flush();
 
         teste_soma_k(k, rng);
