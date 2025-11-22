@@ -12,49 +12,37 @@ using namespace std;
     -------------
 */
 
-
-// elemento nao nulo
 struct Node2 {
     int i, j;
     double valor;
     Node2(int _i, int _j, double v) : i(_i), j(_j), valor(v) {}
 };
 
-
 class MatrizEsparsaTreeDup {
 private:
     int linhas_, colunas_;
 
-    // mapa: mapPorLinha[i][j] -> Node2* ; mapPorColuna[j][i] -> Node2*
     map<int, map<int, Node2*>> mapPorLinha;
     map<int, map<int, Node2*>> mapPorColuna;
 
-    // ponteiros apontam para as estruturas que representam "row-index" e "col-index"
     map<int, map<int, Node2*>>* linhaPtr;
     map<int, map<int, Node2*>>* colPtr;
     
-    // Construtor auxiliar PRIVADO para criar uma cópia com novos nós (Shallow Copy de estrutura)
     MatrizEsparsaTreeDup(const MatrizEsparsaTreeDup& original)
         : linhas_(original.linhas_), colunas_(original.colunas_)
     {
-        // 1. Inicializa ponteiros para as estruturas físicas
         linhaPtr = &mapPorLinha;
         colPtr = &mapPorColuna;
         
-        // 2. Itera sobre a estrutura física original (mapPorLinha) em O(k)
         for (auto const& [i, innerMap] : original.mapPorLinha) {
             for (auto const& [j, nodeOriginal] : innerMap) {
-                // 3. Cria um NOVO Node2* para a cópia R
                 Node2* novo = new Node2(i, j, nodeOriginal->valor);
                 
-                // 4. Insere o novo nó em AMBAS as estruturas físicas da cópia C em O(log k)
-                // Usamos o 'at' para garantir que os índices de linha/coluna existam
                 mapPorLinha[i][j] = novo;
                 mapPorColuna[j][i] = novo;
             }
         }
         
-        // 5. Garante que os ponteiros lógicos (linhaPtr/colPtr) da cópia espelhem a visão lógica da original.
         if (original.linhaPtr == &original.mapPorColuna) {
             swap(linhaPtr, colPtr);
         }
@@ -115,8 +103,6 @@ public:
     //ACESSAR ELEMENTO
     double getElemento(int i, int j) const {
         if (i < 0 || j < 0) return 0.0;
-        
-        // ... (Corpo da função getElemento() é o mesmo do original, O(log k)) ...
         auto itOuter = linhaPtr->find(i);
         if (itOuter == linhaPtr->end()) return 0.0;
         auto itInner = itOuter->second.find(j);
@@ -126,14 +112,12 @@ public:
 
     //RETORNAR TRANSPOSTA
     void transpor() {
-        // ... (Corpo da função transpor() é o mesmo do original, O(1)) ...
         swap(linhaPtr, colPtr);
         swap(linhas_, colunas_);
     }
 
     //SOMA DE MATRIZES
     MatrizEsparsaTreeDup somar(const MatrizEsparsaTreeDup& B) const {
-        // ... (Corpo da função somar() é o mesmo do original, O((kA + kB) log k)) ...
         MatrizEsparsaTreeDup C(linhas_, colunas_);
 
         for (auto itOuter = this->linhaPtr->begin(); itOuter != this->linhaPtr->end(); ++itOuter) {
